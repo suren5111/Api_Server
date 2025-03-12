@@ -70,3 +70,9 @@ app.use('/my', userInfoRouter)
 app.listen(3007, () => {
     console.log('api server running at 127.0.0.1:3007')
 })
+
+
+
+
+// TODO ： 怎么写接口文档
+//         get和post的区别

@@ -23,11 +23,18 @@ const id = joi.number()
               .integer()
               .min(1)
               .required()
+
 const nickname = joi.string()
                     .required()
+
 const email = joi.string()
                  .email()
                  .required()
+
+const avater = joi.string()
+                  .dataUrl()
+                  .required()
+
 
 // 定义验证登录的对象
 exports.reg_login_schema = {
@@ -46,4 +53,17 @@ exports.update_userinfo_schema = {
     }
 }
 
+exports.update_password_schema = {
+    body: {
+        oldPassword: password,
+        newPassword: joi.not(joi.ref('oldPassword'))  // 新密码不能等于旧密码
+                                .concat(password)   // 合并密码的验证规则
+    }
+}
 
+
+exports.update_avater_schema = {
+    body: {
+        avaterUrl
+    }
+}

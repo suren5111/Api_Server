@@ -1,6 +1,8 @@
 const { result } = require('@hapi/joi/lib/base')
 const db = require('../db/index')
 
+// 密码处理模块
+const bcrypt = require('bcryptjs')
 
 exports.getUserInfo = (req, res) => {
 
@@ -39,3 +41,50 @@ exports.updateUserInfo = (req, res) => {
     res.send('ok')
 }
 
+
+// 更新密码
+
+exports.upupdatePassword  = (req, res) => {
+    
+    const sql1 = 'select * from ev_users where id = ?'
+
+    db.query(sql1, req.user.id, (req, results) => {
+
+        if (err) return res.cc(err)
+        if (results.length !== 1) return res.cc('用户不存在')
+        
+        const compareResult = bcrypt.compareSync(req.body.oldPassword, results[0].password)
+        if(!compareResult) return res.cc('旧密码错误')
+        
+        
+        // 如果上述if都没有return，则更新密码
+        const sql2 = 'update ev_users set password = ? where id = ?'
+        const newPassword = bcrypt.hashSync(req.body.newPassword, 10)
+        
+        db.query(sql2, [newPassword, req.user.id], (req, results) => {
+            if (err) return res.cc(err)
+            if (results.length !== 1) return res.cc('更新密码失败')
+            
+            res.cc('更新密码成功')
+        })
+
+    })
+    
+    res.send('ok')
+}
+
+
+// 更新用户头像
+exports.updateAvater = (req, res) => {
+
+    const sql = 'update ev_usrs set user_pic = ? where id = ?'
+
+    db.query(sql, [req.body.avater, req.body.id], (res, results) => {
+
+        if (err) return res.cc(err)
+        if (result.length !== 1) return res.cc('更新头像失败')
+        
+        res.cc('更新头像成功')
+    })
+
+}
