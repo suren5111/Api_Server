@@ -9,7 +9,7 @@ const expressJoi = require('@escook/express-joi')
 const {reg_login_schema} = require('../schema/user')
 
 
-// 导入用户路由处理函数模块
+// 导入用户路由处理函数
 const userHandler = require('../router_handler/user')
 
 

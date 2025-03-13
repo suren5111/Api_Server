@@ -2,8 +2,10 @@ const express = require('express')
 const cors = require('cors')
 
 const app = express()
+
 // 注册cors为全局可用的中间件
 app.use(cors())
+
 // 配置解析表单数据的中间件，这个中间件，只能解析application/x-www-form-urlencoded格式的表单数据
 app.use(express.urlencoded( {extended : false} ))
 
@@ -29,7 +31,7 @@ app.use((req, res, next) => {
         // status默认为一，表示失败的情况
         res.send({
             status,
-            // 如果err是Error的一个实例，职责返回err.message，否则返回err
+            // 如果err是Error的一个实例，则返回err.message，否则返回err
             message: err instanceof Error ? err.message : err
     })
 
@@ -52,9 +54,6 @@ app.use(expressJWT({secret: config.jwtSecretKey}).unless({ path: [/^\/api/]}))
 
 
 
-
-
-
 // 导入并使用用户路由模块
 const userRouter = require('./router/user')
 // 访问路径http://127.0.0.1:3007/api/路由名
@@ -66,13 +65,11 @@ const userInfoRouter = require('./router/userinfo')
 // 以my开头的接口需要经过身份认证
 app.use('/my', userInfoRouter)
 
+
+
 // 创建服务
 app.listen(3007, () => {
     console.log('api server running at 127.0.0.1:3007')
 })
 
 
-
-
-// TODO ： 怎么写接口文档
-//         get和post的区别
